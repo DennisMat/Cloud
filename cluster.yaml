@@ -1,0 +1,13 @@
+--- # see https://eksctl.io/
+# many example can be found here: https://github.com/weaveworks/eksctl/tree/master/examples
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: DennisCluster
+  region: us-east-2
+
+nodeGroups:
+  - name: ng1workers
+    instanceType: t2.nano
+    desiredCapacity: 3
