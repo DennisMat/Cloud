@@ -6,8 +6,11 @@ kind: ClusterConfig
 metadata:
   name: DennisCluster
   region: us-east-2
-
+# this example has a minimum of 3+2=5 instances of EC2 and a max of 3+5=8 Instances of EC2
 nodeGroups:
   - name: ng1workers
     instanceType: t2.nano
-    desiredCapacity: 3
+    desiredCapacity: 3 #number of EC2 instances
+  - name: ng2workers  #variable load, if instanc eis not specified then it defaults to m5.large
+    minSize: 2
+    maxSize: 5
