@@ -1,0 +1,37 @@
+/*
+https://eksctl.io/
+eksctl is a simple CLI tool for creating clusters on EKS - Amazon’s new managed Kubernetes service for EC2. It is written in Go, uses CloudFormation, was created by Weaveworks and it welcomes contributions from the community. Create a basic cluster in minutes with just one command :
+*/
+
+aws2 configure 
+
+# this actually worked once.
+eksctl create cluster --name DennisCluster --region us-east-2 --nodegroup-name standard-workers --node-type t3.medium --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto
+eksctl delete cluster --region=us-east-2 --name=DennisCluster
+eksctl create cluster -f cluster.yaml 
+
+
+# vpc option exits only with a windows container. because it give sthe error:
+running Windows workloads requires having both Windows and Linux (AmazonLinux2) node groups
+#eksctl create cluster -f cluster.yaml --install-vpc-controllers
+
+
+
+
+# how to deploy appliaction: https://docs.aws.amazon.com/eks/latest/userguide/eks-guestbook.html
+
+
+
+#Try these
+
+kubectl delete -f loadbalancer.yaml
+kubectl delete -f loadbalancer.yaml
+
+
+-------------------------
+
+kubectl get services -o wide
+kubectl get nodes
+kubectl get pods
+kubectl describe node
+kubectl describe pod
