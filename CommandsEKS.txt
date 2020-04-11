@@ -8,7 +8,7 @@ aws2 configure
 # this actually worked once.
 eksctl create cluster --name DennisCluster --region us-east-2 --nodegroup-name standard-workers --node-type t3.medium --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto
 eksctl delete cluster --region=us-east-2 --name=DennisCluster
-eksctl create cluster -f cluster.yaml 
+
 
 
 # vpc option exits only with a windows container. because it give sthe error:
@@ -22,9 +22,9 @@ running Windows workloads requires having both Windows and Linux (AmazonLinux2) 
 
 
 
-#Try these
-
-kubectl delete -f loadbalancer.yaml
+#main commands
+eksctl create cluster -f cluster.yaml 
+kubectl apply -f loadbalancer.yaml
 kubectl delete -f loadbalancer.yaml
 
 

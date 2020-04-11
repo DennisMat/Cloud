@@ -1,0 +1,1 @@
+LocalMachineMiniKubeAll these commands and configurations will only apply on the local machine when using minikube.

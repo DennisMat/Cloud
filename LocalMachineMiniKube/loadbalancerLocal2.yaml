@@ -1,0 +1,39 @@
+#this works!, do not change a character!
+# this creates a service of type loadbalancer, for a given deployment.
+# this work only using windows/minikube/local machine and not on AWS cloud
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dennisdeployment2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: denniscontainer2
+  template:
+    metadata:
+      labels:
+        name: denniscontainer2
+    spec:
+      containers:
+      - name: denniscontainer2
+        image: docker.io/dockeridiotfool/spring-boot-dennis2
+        ports:
+        - name: http-server
+          containerPort: 8090
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dennisservice2
+  labels:
+    app: denniscontainer2
+spec:
+  ports:
+  - port: 8094 #the port on which it is available via the external dns
+    targetPort: http-server
+  selector:
+    app: denniscontainer2
+  type: LoadBalancer
