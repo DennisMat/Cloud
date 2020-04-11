@@ -6,46 +6,51 @@ minikube dashboard
 minikube stop
 minikube delete #if thinks are messed up.
 
-set JAVA_HOME=C:\Program Files\Java\jdk-8u152-windows-x64
-set M2_HOME=E:\work\software\apache-maven-3.5.2
-set MAVEN_HOME=E:\work\software\apache-maven-3.5.2
+set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_201
+set M2_HOME=C:\work\apache-maven-3.6.3
+set MAVEN_HOME=C:\work\apache-maven-3.6.3
 set PATH=%PATH%;%M2_HOME%\bin
-
+cd C:/dennis/work/Cloud/applications/spring-boot-example
+mvn -DskipTests package
+cd C:/dennis/work/Cloud/applications/spring-boot-example2
 mvn -DskipTests package
 
 docker login --username=dockeridiotfool 
 
-#Open Docker CLI from kinematic
-cd C:/dennis/todo/Containers/spring-boot-example
+
+cd C:/dennis/work/Cloud/applications/spring-boot-example
+mvn -DskipTests package
+cd C:/dennis/work/Cloud/applications/spring-boot-example2
+mvn -DskipTests package
+
 # works, this creates an image inside the 'default' virtual box
-# this is to be done in docker terminal
-docker build -t spring-boot-dennis .
-cd C:\dennis\work\Cloud\applications\spring-boot-example2
-docker build -t spring-boot-dennis2 .
-
-
-docker tag 7c66c0f20bfb dockeridiotfool/spring-boot-dennis
+# this is to be done in docker terminal ( notice the forward slashes in the directory)
+cd C:/dennis/work/Cloud/applications/spring-boot-example
+docker build -t dockeridiotfool/spring-boot-dennis .
+cd C:/dennis/work/Cloud/applications/spring-boot-example2
+docker build -t dockeridiotfool/spring-boot-dennis2 .
 docker push dockeridiotfool/spring-boot-dennis
-
-docker tag 7c66c0f20bfb dockeridiotfool/spring-boot-dennis2
 docker push dockeridiotfool/spring-boot-dennis2
 
-docker images
+/* previously I used to use:
+docker build -t spring-boot-dennis2 <---Note the difference here
+docker tag 7c66c0f20bfb dockeridiotfool/spring-boot-dennis2
+docker push dockeridiotfool/spring-boot-dennis
+But this is no longer needed
+*/
 
 #remove docker image, use first 3 chars of image tag , - f stands for force remove.
 docker rmi <first3charOfImage> -f
 docker image rm <first3charOfImage> # this has the same effect as the previous line.
 
-kubectl delete deploy  dennisdeployment
-kubectl delete service dennisexposedservice
-kubectl delete service dennisservice
-kubectl delete deploy  dennisdeployment2
-kubectl delete service dennisexposedservice2
-kubectl delete service dennisservice2
+cd C:\dennis\work\Cloud\LocalMachineMiniKube
+
+kubectl create namespace servicens
+kubectl create namespace clientns
 
 kubectl delete -f loadbalancerLocal.yaml
 kubectl delete -f loadbalancerLocal2.yaml
-
+kubectl delete service dennisexposedservice
 kubectl create -f loadbalancerLocal.yaml
 kubectl create -f loadbalancerLocal2.yaml
 kubectl get services
@@ -56,7 +61,13 @@ Run the following command ( this command does not show the desired result)
 minikube service dennisservice
 
 #As a work around try this:  there are bugs: Just edit the config dennisdeployment in the minikube dashboard _after_ exposing the deployment and save
+kubectl config set-context --current --namespace=clientns
 kubectl expose deployment dennisdeployment --type=LoadBalancer --port=8084 --target-port 8080 --name=dennisexposedservice
 
 # notice now there is new service created by name dennisexposedservice
 minikube service dennisexposedservice
+
+#Getting a shell to a Container use kubectl get pods to get name of pod. kubectl get  pods --all-namespaces -o wide
+kubectl exec -it <podname> -- sh
+kubectl exec -it <podname> -- /bin/sh
+kubectl --namespace=kube-system exec -ti kube-dns-v9-aqlws -c skydns --nslookup kubers.default.svc.cluster.local localhost

@@ -6,6 +6,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dennisdeployment
+  #namespace: clientns
 spec:
   replicas: 3
   selector:
@@ -18,7 +19,7 @@ spec:
     spec:
       containers:
       - name: denniscontainer
-        image: docker.io/dockeridiotfool/spring-boot-dennis
+        image: docker.io/dockeridiotfool/spring-boot-dennis:latest
         ports:
         - name: http-server
           containerPort: 8080
@@ -28,6 +29,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: dennisservice
+  #namespace: clientns
   labels:
     app: denniscontainer
 spec:
