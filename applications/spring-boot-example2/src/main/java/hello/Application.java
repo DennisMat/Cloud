@@ -16,7 +16,7 @@ public class Application {
 	@RequestMapping("/insideapp")
 	public String home() {
 		try {
-			return "Hello from the inside app. " 
+			return "Hello from the service  app. " 
 		    + "<br>Ip adress = " + InetAddress.getLocalHost().getHostAddress()
 		    + "<br>Time = " + (new Date()).toString();
 		    

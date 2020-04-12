@@ -51,19 +51,22 @@ kubectl create namespace clientns
 kubectl delete -f loadbalancerLocal.yaml
 kubectl delete -f loadbalancerLocal2.yaml
 kubectl delete service dennisexposedservice
+kubectl delete service dennisexposedservice2
 kubectl create -f loadbalancerLocal.yaml
 kubectl create -f loadbalancerLocal2.yaml
 kubectl get services
-Note that the above command will show EXTERNAL-IP   as pending if minikube is used.
+#Note that the above command will show EXTERNAL-IP   as pending if minikube is used.
 
-On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. On Minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
-Run the following command ( this command does not show the desired result)
-minikube service dennisservice
+#On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. On Minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
+#Run the following command ( this command does not show the desired result)
+#minikube service dennisservice
 
 #As a work around try this:  there are bugs: Just edit the config dennisdeployment in the minikube dashboard _after_ exposing the deployment and save
-kubectl config set-context --current --namespace=clientns
+#kubectl config set-context --current --namespace=clientns
 kubectl expose deployment dennisdeployment --type=LoadBalancer --port=8084 --target-port 8080 --name=dennisexposedservice
+kubectl expose deployment dennisdeployment --type=LoadBalancer --port=8094 --target-port 8090 --name=dennisexposedservice2
 
+#Important: unless dennisexposedservice2 is exposed it will not be accesible by dennisservice
 # notice now there is new service created by name dennisexposedservice
 minikube service dennisexposedservice
 
@@ -71,3 +74,7 @@ minikube service dennisexposedservice
 kubectl exec -it <podname> -- sh
 kubectl exec -it <podname> -- /bin/sh
 kubectl --namespace=kube-system exec -ti kube-dns-v9-aqlws -c skydns --nslookup kubers.default.svc.cluster.local localhost
+
+Once inside the shell, the following commands will cwork
+printenv commmand _inside_ the container will list all environment variables
+wget -O - http://dennisexposedservice:8084/
