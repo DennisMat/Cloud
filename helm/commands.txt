@@ -1,0 +1,34 @@
+helm create mychart
+helm install  dennis-chart ./mychart/ --set service.type=NodePort
+helm uninstall dennis-chart
+
+helm search hub wordpress
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+#default installation
+helm install dennis-wordpress bitnami/wordpress
+
+#installtion with changed values:
+helm install dennis-wordpress bitnami/wordpress --set replicaCount=3
+helm install dennis-wordpress --set wordpressUsername=admin --set wordpressPassword=password bitnami/wordpress
+helm install -f wordpress-new-values.yaml dennis-wordpress bitnami/wordpress
+
+helm delete dennis-wordpress
+  
+#Upgrading values
+helm upgrade --reuse-values -f wordpress-new-values.yaml dennis-wordpress bitnami/wordpress
+  
+#to get version  
+helm ls  
+  
+#ip address:
+kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}"
+#Port:
+kubectl get svc --namespace default dennis-wordpress
+
+
+#does not work.
+helm upgrade --reuse-values --set wordpressUsername=admin --set wordpressPassword=password dennis-wordpress bitnami/wordpress
+
+

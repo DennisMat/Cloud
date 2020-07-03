@@ -9,7 +9,7 @@ metadata:
 # this example has a minimum of 3+2=5 instances of EC2 and a max of 3+5=8 Instances of EC2
 nodeGroups:
   - name: ng1workers
-    instanceType: t2.nano
+    instanceType: t2.nano #t2.micro is bigger, but is the free version.
     desiredCapacity: 3 #number of EC2 instances
   - name: ng2workers  #variable load, if instanc eis not specified then it defaults to m5.large
     minSize: 2
