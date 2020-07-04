@@ -18,7 +18,7 @@ running Windows workloads requires having both Windows and Linux (AmazonLinux2) 
 
 
 
-# how to deploy appliaction: https://docs.aws.amazon.com/eks/latest/userguide/eks-guestbook.html
+# how to deploy application: https://docs.aws.amazon.com/eks/latest/userguide/eks-guestbook.html
 
 
 

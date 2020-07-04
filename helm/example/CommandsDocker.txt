@@ -1,0 +1,37 @@
+set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_201
+set M2_HOME=C:\work\apache-maven-3.6.3
+set MAVEN_HOME=C:\work\apache-maven-3.6.3
+set PATH=%PATH%;%M2_HOME%\bin
+cd C:\dennis\work\Cloud\helm\spring-boot-postgres\new\spring-boot-postgres-on-k8s-sample-master
+mvn -DskipTests package
+docker login --username=dockeridiotfool 
+
+
+
+This example has been picked from https://github.com/mkjelland/spring-boot-postgres-on-k8s-sample
+
+# works, this creates an image inside the 'default' virtual box
+# this is to be done in docker terminal ( notice the forward slashes in the directory)
+cd C:/dennis/work/Cloud/helm/spring-boot-postgres/new/spring-boot-postgres-on-k8s-sample-master
+docker build -t dockeridiotfool/spring-boot-postgres .
+docker push dockeridiotfool/spring-boot-postgres
+
+
+#remove docker image, use first 3 chars of image tag , - f stands for force remove.
+docker rmi <first3charOfImage> -f
+docker image rm <first3charOfImage> # this has the same effect as the previous line.
+
+#######################################################################
+#Commands below are need only if you are testing docker desktop
+########################################################################
+
+
+
+docker run --name postgres -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
+docker run --name springboot -p 8080:8080 -e POSTGRES_HOST=192.168.99.103 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d dockeridiotfool/spring-boot-postgres
+docker stop postgres
+docker stop springboot
+#clean up
+docker system prune
+
+

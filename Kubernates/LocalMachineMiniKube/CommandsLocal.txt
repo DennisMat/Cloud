@@ -3,6 +3,7 @@
 
 minikube start --vm-driver=virtualbox
 minikube dashboard
+minikube ssh
 minikube stop
 minikube delete #if thinks are messed up.
 

@@ -7,14 +7,14 @@ helm search hub wordpress
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 #default installation
-helm install dennis-wordpress bitnami/wordpress
+helm install dennis-wp bitnami/wordpress
 
 #installtion with changed values:
-helm install dennis-wordpress bitnami/wordpress --set replicaCount=3
-helm install dennis-wordpress --set wordpressUsername=admin --set wordpressPassword=password bitnami/wordpress
+helm install dennis-wp bitnami/wordpress --set replicaCount=3
+helm install dennis-wp --set wordpressUsername=admin --set wordpressPassword=password bitnami/wordpress
 helm install -f wordpress-new-values.yaml dennis-wordpress bitnami/wordpress
 
-helm delete dennis-wordpress
+helm delete dennis-wp
   
 #Upgrading values
 helm upgrade --reuse-values -f wordpress-new-values.yaml dennis-wordpress bitnami/wordpress
@@ -26,9 +26,3 @@ helm ls
 kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}"
 #Port:
 kubectl get svc --namespace default dennis-wordpress
-
-
-#does not work.
-helm upgrade --reuse-values --set wordpressUsername=admin --set wordpressPassword=password dennis-wordpress bitnami/wordpress
-
-
