@@ -30,7 +30,7 @@ spec:
               configMapKeyRef:
                 name: hostname-config
                 key: postgres_host
-        image: dockeridiotfool/spring-boot-postgres-on-k8s:v1
+        image: dockeridiotfool/spring-boot-postgres
         ports:
         - name: http-server
           containerPort: 8080

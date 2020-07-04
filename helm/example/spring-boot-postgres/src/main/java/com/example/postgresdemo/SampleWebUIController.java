@@ -55,6 +55,7 @@ public class SampleWebUIController {
     		 sb.append("there are no value");
     	 }
     	
+    	 sb.append("Put in values by using /put/{value}");
   		return sb.toString();
   	}
 
