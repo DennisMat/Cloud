@@ -1,48 +1,51 @@
-# Notes this is a spring boot application that connects to a postgres database.\
-# the orginal app was picked form https://github.com/mkjelland/spring-boot-postgres-on-k8s-sample
-# postgres is deployed using helm.
-# spring boot app is deployed using kubectl
-# The above 2 steps can be possibly combined to use only helm
---------------------------------------------
-       deploy pg                
---------------------------------------------
-From: https://hub.helm.sh/charts/cetic/postgresql
+# Notes:
+This is a spring boot application that connects to a postgres database.
+The orginal app was picked form https://github.com/mkjelland/spring-boot-postgres-on-k8s-sample
+The original app deploys the postgress db and the spring boot app sepeartely.
+I have combined the 2 into one helm chart.
 
-helm repo add cetic https://cetic.github.io/helm-charts
-helm repo update
-helm install dennis-pg cetic/postgresql
-or 
-helm install -f postgres-new-values.yaml dennis-pg cetic/postgresql  # wordpress-new-values.yaml obtained from https://github.com/cetic/helm-postgresql/blob/master/values.yaml
-
-helm delete  dennis-pg
-
-
+In the original app the ip address of the db was used to connect to it by running the command afetr pg deployment;
 kubectl delete configmap hostname-config
 # this line exacts the ip address of the postgress installation an put it's into the the configmap, a key value/pair, this postgres_host varible will be used by the spring boot app.
 kubectl create configmap hostname-config --from-literal=postgres_host=$(kubectl get svc dennis-pg-postgresql  -o jsonpath="{.spec.clusterIP}")
 
-# put in the username/pwd of postgres that can be used by the spring boot application
-kubectl apply yaml/configmap.yaml
+In the combined helm chart I have used  the name of the db host rather than the ip adddress to connect to it.
+
+How I made the combined helm chart of postgress db  and spring boot app:
+-Pick pg helm files from https://github.com/cetic/helm-postgresql and put it in helm-chart
+- Add file spring-boot-appLocal.yml  and spring-boot-configmap.yaml under helm-chart\templates\ 
+-----------------------------------------------
+Commands:
+
+kubectl delete service sbpd-exposed
+helm uninstall dennis-pg
+helm install dennis-pg ./helm-chart/
+kubectl expose deployment spring-boot-postgres-deployment --type=LoadBalancer --port=8084 --target-port 8080 --name=sbpd-exposed
+kubectl get svc  sbpd-exposed
+
+
+-------------------------------------------
+misc - for reference only, they are not needed for running the abouve commands
+----------------------------------------------
+
+
+If only postgres were to be deployed: 
+From: https://hub.helm.sh/charts/cetic/postgresql
+
+
+helm repo add cetic https://cetic.github.io/helm-charts
+helm repo update
+helm delete  dennis-pg
+helm install dennis-pg cetic/postgresql
+or 
+helm install -f postgres-new-values.yaml dennis-pg cetic/postgresql  # wordpress-new-values.yaml obtained from https://github.com/cetic/helm-postgresql/blob/master/values.yaml
+
+
 
 #if you want to see it in your local machine
 kubectl port-forward --namespace default svc/postgres 5432:5432
 
 
-kubectl get svc postgres
-
----------------------------------------
-      deploy spring boot app     
-----------------------------------------
-
-kubectl delete -f yaml/spring-boot-appLocal.yml
-kubectl create -f yaml/spring-boot-appLocal.yml
-
-kubectl delete service sbpd-exposed
-kubectl expose deployment spring-boot-postgres-deployment --type=LoadBalancer --port=8084 --target-port 8080 --name=sbpd-exposed
-
-#ip address:
-kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}"
-#Port:
-kubectl get svc  sbpd-exposed
+helm install --dry-run  dennis-pg ./helm-chart/
 
 

@@ -1,3 +1,5 @@
+---
+# for use by the spring boot app.
 apiVersion: v1
 kind: ConfigMap
 metadata:

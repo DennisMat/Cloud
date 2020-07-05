@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,10 +27,7 @@ spec:
                 name: postgres-config
                 key: postgres_password
           - name: POSTGRES_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: hostname-config
-                key: postgres_host
+            value: {{ template "postgresql.fullname" . }} # this value which is same as in statefulset.yaml metadata.name field, this value is set in _helpers.tpl
         image: dockeridiotfool/spring-boot-postgres
         ports:
         - name: http-server
