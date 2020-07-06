@@ -1,0 +1,10 @@
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm uninstall dennis-jk
+helm install dennis-jk bitnami/jenkins --version 5.0.17
+
+#ip address:
+kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}"
+#Port:
+kubectl get svc --namespace default dennis-jk-jenkins
+
