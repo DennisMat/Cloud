@@ -19,7 +19,7 @@ running Windows workloads requires having both Windows and Linux (AmazonLinux2) 
 
 
 # how to deploy application: https://docs.aws.amazon.com/eks/latest/userguide/eks-guestbook.html
-
+# check examples here: https://github.com/ContainerSolutions/kubernetes-examples
 
 
 #main commands

@@ -11,6 +11,6 @@ nodeGroups:
   - name: ng1workers
     instanceType: t2.nano #t2.micro is bigger, but is the free version.
     desiredCapacity: 3 #number of EC2 instances
-  - name: ng2workers  #variable load, if instanc eis not specified then it defaults to m5.large
+  - name: ng2workers  #variable load, if instance is not specified then it defaults to m5.large
     minSize: 2
     maxSize: 5

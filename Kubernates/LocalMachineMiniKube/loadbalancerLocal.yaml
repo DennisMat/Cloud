@@ -38,4 +38,5 @@ spec:
     targetPort: http-server
   selector:
     app: denniscontainer
-  type: LoadBalancer
+  # The type Exposes the Service externally using a cloud provider's load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created. If this is not specified then it defaults to ClusterIP  
+  type: LoadBalancer 
